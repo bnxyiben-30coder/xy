@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>filesLoader</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="fileloadeicons.png.jpg" type="image/jpeg">
+    <link rel="apple-touch-icon" href="fileloadeicons.png.jpg">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #ffffff;
+            min-height: 100vh;
+            width: 100%;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            text-align: center;
+            padding: 30px 0 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            max-width: 280px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            text-align: center;
+        }
+
+        .download-section {
+            margin-top: 40px;
+        }
+
+        .download-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 420px;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+
+        .download-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .icon-container {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 17px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(135deg, #0056b3, #003d80);
+            transform: scale(1.05);
+        }
+
+        .download-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .recaptcha-container {
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+        }
+
+        .status {
+            margin-top: 10px;
+            font-size: 14px;
+            min-height: 20px;
+        }
+
+        .footer {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-top: 1px solid #e0e0e0;
+            padding: 40px 20px 30px;
+            text-align: center;
+            margin-top: auto;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .footer p {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer strong {
+            color: #222;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with centered Logo -->
+    <div class="header">
+        <img src="fileloadeicons.png.jpg" alt="FilesLoader" class="logo">
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="download-section">
+            <div class="download-card">
+                <div class="icon-container">
+                    <svg width="110" height="110" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 3V7C14 8.10457 14.8954 9 16 9H20" stroke="#007bff" stroke-width="1.5" stroke-linejoin="round"/>
+                        <path d="M14 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V9L14 3Z" stroke="#007bff" stroke-width="1.5" stroke-linejoin="round"/>
+                        <path d="M12 13V18M12 18L9 15M12 18L15 15" stroke="#007bff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                
+                <!-- reCAPTCHA -->
+                <div class="recaptcha-container" id="recaptcha-container">
+                    <div class="g-recaptcha" data-sitekey="6LcIpkYtAAAAADLg3_KsXatL-yvFO_FRKeokmISN" data-callback="onRecaptchaSuccess"></div>
+                </div>
+
+                <button class="download-btn" id="downloadBtn" onclick="handleDownload()" disabled>
+                     Download File
+                </button>
+
+                <div class="status" id="status"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>
+            <strong>Copyright and File Protection Policy</strong><br><br>
+            All files uploaded to <strong>FilesLoader</strong> are protected. 
+            Copying, reuploading, sharing, or using any content without permission 
+            from the original owner is strictly prohibited. 
+            Any violation of this policy may result in legal action.
+        </p>
+        <p style="margin-top: 20px; font-size: 13px;">
+            &copy; 2026 FileLoader. All Rights Reserved.
+        </p>
+    </footer>
+
+    <!-- reCAPTCHA Script -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    
+    <!-- Your Script -->
+    <script src="script.js"></script>
+</body>
+</html>
